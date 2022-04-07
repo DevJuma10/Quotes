@@ -5,9 +5,6 @@ from scrapy_splash import SplashRequest
 
 class QuoteSpider(scrapy.Spider):
     name = 'quote'
-    allowed_domains = ['http://quotes.toscrape.com']
-    start_urls = ['https://quotes.toscrape.com/js//']
-
 
     script = '''
          function main(splash, args)

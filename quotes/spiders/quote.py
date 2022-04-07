@@ -1,5 +1,7 @@
+
 import scrapy
 from scrapy_splash import SplashRequest
+
 
 class QuoteSpider(scrapy.Spider):
     name = 'quote'
@@ -8,8 +10,7 @@ class QuoteSpider(scrapy.Spider):
 
 
     script = '''
-    
-        function main(splash, args)
+         function main(splash, args)
         
             splash:set_user_agent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36")
 
@@ -34,6 +35,7 @@ class QuoteSpider(scrapy.Spider):
             }
         ) 
 
+
     def parse(self, response):
         for quote in response.xpath("//div[contains(@class,'quote')]"):
             yield{
@@ -42,9 +44,9 @@ class QuoteSpider(scrapy.Spider):
                 "tags"    : quote.xpath(".//div/a/text()").getall()
             }
 
-
-        #HANDLING PAGINATION
-        next_page = response.xpath("//ul/li[1]/a/@href").get()
+        #  HANDLING PAGINATION
+        next_page = response.xpath("//ul/li[@class='next']/a/@href").get()
         if next_page:
             next_page_url = response.urljoin(next_page)
-            yield scrapy.Request(url = next_page_url, callback = self.parse)
+            yield SplashRequest(url = next_page_url, callback = self.parse)
+
